@@ -4,10 +4,10 @@ const authorize = require('../middleware/authorize')
 const ClientController = require('../controllers/ClientController')
 
 // CREATE User
-router.post('/create-user', ClientController.registerSchema, ClientController.createUser)
+router.post('/create-user', ClientController.createUser)
 
 // POST Login/Authenticate User
-router.post('/authenticate', ClientController.authenticateSchema, ClientController.authenticate)
+router.post('/authenticate', ClientController.authenticate)
 
 // GET Verfiy User
 router.get('/verify', authorize(), ClientController.verifyUser)

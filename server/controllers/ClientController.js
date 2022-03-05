@@ -1,38 +1,37 @@
 const config = require('config.json')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const db = require('helpers/db')
+const db = require('../helpers/db')
 const Joi = require('joi')
 const validateRequest = require('middleware/validate-request')
 const {Op} = require('sequelize')
 const moment = require('moment')
 
-function registerSchema(req, res, next) {
-    const schema = Joi.object({
-        firstName: Joi.string().required(),
-        lastName: Joi.string().required(),
-        email: Joi.string().required(),
-        password: Joi.string().min(6).required(),
-		dob: Joi.string().min(6).required(),
-		phone: Joi.string().min(6).required(),
-		referral: Joi.string().allow('').optional()
-    });
-    validateRequest(req, next, schema);
-}
+// function registerSchema(req, res, next) {
+//     const schema = Joi.object({
+//         firstName: Joi.string().required(),
+//         lastName: Joi.string().required(),
+//         email: Joi.string().required(),
+//         password: Joi.string().min(6).required(),
+// 		dob: Joi.string().min(6).required(),
+// 		phone: Joi.string().min(6).required(),
+// 		referral: Joi.string().allow('').optional()
+//     });
+//     validateRequest(req, next, schema);
+// }
 
 const createUser = async (req, res) => {
 	const {email, password, firstName, lastName, dob, referral, phone} = req.body
 	try {
-		if (await db.Users.findOne({where: {email: email}})) {
+		if (await db.User.findOne({where: {email: email}})) {
 			res.status(422).json({message: 'Username already taken'})
 		}
 
 		if (password) {
 			const hash = await bcrypt.hash(password, 10)
-			const user = await db.Users.create({email, hash, firstName, lastName, dob, referral, phone, points: 0, strikes: 0})
-			const role = await db.Roles.create({userId: user.id, role: 'admin'})
+			const user = await db.User.create({email, hash, firstName, lastName, dob, referral, phone, points: 0, strikes: 0})
 
-			res.status(200).json({message: Success, user, role})
+			res.status(200).json({user})
 		}
 	} catch (error) {
 		console.log(error)
@@ -50,6 +49,7 @@ function authenticateSchema(req, res, next) {
 
 const authenticate = async (req, res) => {
 	const {email, password} = req.body
+	console.log('email', email, password)
 	try {
 		const user = await db.Users.scope('withHash').findOne({where: {email}})
 
@@ -80,7 +80,6 @@ const verifyUser = async (req, res) => {
 }
 
 module.exports = {
-	registerSchema,
 	createUser,
 	authenticateSchema,
 	authenticate,
