@@ -9,12 +9,12 @@ import HomeStack from './homeStack'
 
 export default function RootNavigator() {
 	const [isLoading, setIsLoading] = useState(false)
-    const [user, setUser] = useState(true)
+    const [user, setUser] = useState(false)
 
 	useEffect(async() => {
 		const credentials = {'email': 'andrew.m.chester@gmail.com', 'password': 'Password1'}
 		await axios.post('https://46a2-198-150-234-220.ngrok.io/users/authenticate', credentials)
-		setUser(true)
+		setUser(false)
 		setIsLoading(false)
 	}, [])
 

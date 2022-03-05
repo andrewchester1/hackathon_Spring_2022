@@ -1,8 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import {Center, VStack, HStack, Box, Text, Button, Input, Heading, KeyboardAvoidingView} from 'native-base';
 
+import axios from 'axios'
 
 const Settings = () => {
+    useEffect(async () => {
+        const credentials = {'email': 'andrew@gmail.com', 'password': 'Password1'}
+		const user = await axios.post('https://46a2-198-150-234-220.ngrok.io/users/authenticate', credentials)
+        console.log('userData', user)
+    }, [])
     return (
         <VStack flex={1} safeArea>
             <Center>

@@ -51,14 +51,13 @@ const authenticate = async (req, res) => {
 	const {email, password} = req.body
 	console.log('email', email, password)
 	try {
-		const user = await db.Users.scope('withHash').findOne({where: {email}})
+		const user = await db.User.findOne({where: {email: email}})
 
 		if (!user || !(await bcrypt.compare(password, user.hash))) {
 			res.status(404).json({ message: NotFoundErrorMessage })
 		}
-		const role = await db.Roles.findAll({where: {userId: user.id}})
 		const token = jwt.sign({sub: user.id}, config.secret, {expiresIn: '7d'})
-		res.status(200).json({...omitHash(user.get()), role, token})
+		res.status(200).json({user, token})
 	} catch (error) {
 		console.log(error)
 		res.status(500).json({message: InternalServerErrorMessage})

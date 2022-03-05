@@ -10,7 +10,7 @@ router.post('/create-user', ClientController.createUser)
 router.post('/authenticate', ClientController.authenticate)
 
 // GET Verfiy User
-router.get('/verify', authorize(), ClientController.verifyUser)
+router.get('/verify', ClientController.verifyUser)
 
 // UPDATE User Data
 // router.put('/:id', authorize(), ClientController.updateUser)
