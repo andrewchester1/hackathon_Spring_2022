@@ -27,7 +27,7 @@ export const deleteToken = async () => {
 }
 
 export const getApiServer = () => {
-    return 'https://3543-198-150-234-220.ngrok.io'
+    return 'https://bcd3-198-150-234-220.ngrok.io'
 }
 
 export const authHeader = async () => {
